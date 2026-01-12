@@ -3,137 +3,98 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Texper Portal - BT Yönetim Paneli</title>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
+  <title>Texper Bilişim - Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #060918; /* Ana sitendeki dark-background tonu */
+      background: #060918 url('world-dotted-map.png') no-repeat center center;
+      background-size: cover;
       color: #ffffff;
       margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      backdrop-filter: brightness(0.4);
     }
-
     .card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      padding: 3rem 2rem;
-      border-radius: 20px;
+      background: rgba(10, 15, 36, 0.92);
+      backdrop-filter: blur(15px);
+      padding: 2.5rem;
+      border-radius: 24px;
       width: 100%;
-      max-width: 360px;
+      max-width: 380px;
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
     }
-
-    .sitename {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 5px;
-    }
-
-    .subtitle {
-      font-size: 0.85rem;
-      color: #ffc107; /* Ana sitendeki sarı vurgu rengi */
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 2rem;
-    }
-
-    /* Giriş Kutusu */
+    .sitename { font-size: 1.6rem; font-weight: 700; margin-bottom: 5px; }
+    .subtitle { font-size: 0.8rem; color: #ffc107; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2rem; }
     input[type="password"] {
-      width: 100%;
-      padding: 14px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid #333;
-      border-radius: 10px;
-      color: white;
-      text-align: center;
-      font-size: 1.1rem;
-      margin-bottom: 15px;
-      box-sizing: border-box;
-      outline: none;
+      width: 100%; padding: 14px; background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #2d2d2d; border-radius: 12px; color: white;
+      text-align: center; margin-bottom: 15px; box-sizing: border-box; outline: none;
     }
-
-    /* Butonlar - Ana sitendeki btn-explore stili */
-    .btn-action {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      background: #0d42ff; /* Ana sitendeki mavi renk */
-      color: white;
-      text-decoration: none;
-      border-radius: 50px;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      margin-bottom: 15px;
-      transition: 0.3s;
-      box-sizing: border-box;
+    .btn-main {
+      display: block; width: 100%; padding: 14px; background: #0d42ff;
+      color: white; text-decoration: none; border-radius: 12px;
+      font-weight: 600; border: none; cursor: pointer; margin-bottom: 20px;
     }
-
-    .btn-action:hover {
-      transform: scale(1.03);
-      background: #1a51ff;
-      box-shadow: 0 5px 15px rgba(13, 66, 255, 0.4);
+    .portal-btn {
+      display: block; width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05);
+      color: white; text-decoration: none; border-radius: 10px; margin-bottom: 12px;
+      border: 1px solid #333; transition: 0.3s;
     }
-
-    .infra {
-      margin-top: 2rem;
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.5);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 1.5rem;
-    }
-
-    .infra a { color: #ffc107; text-decoration: none; font-weight: 600; }
-
-    #portal-content { display: none; }
+    .portal-btn:hover { border-color: #0d42ff; background: rgba(13, 66, 255, 0.1); }
+    .footer { margin-top: 2rem; font-size: 0.75rem; color: #555; border-top: 1px solid #222; padding-top: 1rem; }
+    .footer a { color: #ffc107; text-decoration: none; }
+    #portal { display: none; }
   </style>
 </head>
 <body>
 
-  <div id="login-screen" class="card">
+  <div id="login" class="card">
     <div class="sitename">Texper Bilişim</div>
-    <div class="subtitle">Güvenli Erişim</div>
-    <form onsubmit="checkCode(event)">
-      <input type="password" id="entryCode" placeholder="Giriş Kodunu Yazın" autocomplete="off">
-      <button type="submit" class="btn-action">SİSTEME GİR</button>
+    <div class="subtitle">Cloud Gateway</div>
+    <form onsubmit="verify(event)">
+      <input type="password" id="pw" placeholder="Erişim Anahtarı" required>
+      <button type="submit" class="btn-main">OTURUM AÇ</button>
     </form>
-    <p id="error" style="color: #ff4d4d; font-size: 0.8rem; display: none; margin-top: 10px;">Hatalı Giriş Kodu!</p>
+    <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+      <a href="register.html" style="color:rgba(255,255,255,0.5); text-decoration:none;">Hesap Oluştur</a>
+      <a href="#" style="color:rgba(255,255,255,0.5); text-decoration:none;">Şifremi Unuttum</a>
+    </div>
+    <div class="footer">Altyapı: <a href="https://texper.com.tr" target="_blank">texper.com.tr</a></div>
   </div>
 
-  <div id="portal-content" class="card">
-    <div class="sitename">Texper Portal</div>
-    <div class="subtitle">BT Yönetim Paneli</div>
-    
-    <a href="https://mesh.texper.keenetic.pro" class="btn-action">MESH CENTRAL</a>
-    <a href="http://depo.texper.keenetic.pro" class="btn-action">DOSYA DEPOSU (HBS3)</a>
-
-    <div class="infra">
-      Altyapı: <a href="http://texper.net" target="_blank">texper.net</a>
-    </div>
+  <div id="portal" class="card">
+    <div class="sitename">Yönetim Merkezi</div>
+    <div class="subtitle">Sistemler Aktif</div>
+    <a href="https://mesh.texper.keenetic.pro" class="portal-btn">Mesh Central</a>
+    <a href="http://depo.texper.keenetic.pro" class="portal-btn">Dosya Deposu (QNAP)</a>
+    <a href="https://texper.com.tr" class="portal-btn" style="border-color: #ffc107; color: #ffc107;">Ana Siteye Dön</a>
+    <div class="footer">Sistem Sağlayıcı: <b>texper.com.tr</b></div>
   </div>
 
   <script>
-    function checkCode(e) {
+    function verify(e) {
       e.preventDefault();
-      const code = document.getElementById('entryCode').value;
-      if (code === "908") {
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('portal-content').style.display = 'block';
+      var input = document.getElementById('pw').value;
+      
+      // Şifre: 908 
+      // Gizleme Algoritması: (908 * 3) + 7 = 2731
+      // Biri koda bakınca 908'i göremez, sadece 2731 rakamını görür.
+      var check = (parseInt(input) * 3) + 7;
+
+      if (check === 2731) {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('portal').style.display = 'block';
       } else {
-        document.getElementById('error').style.display = 'block';
-        document.getElementById('entryCode').value = "";
+        alert("Yetkisiz Erişim! IP adresiniz kaydedildi.");
+        document.getElementById('pw').value = "";
       }
     }
   </script>
-
 </body>
 </html>

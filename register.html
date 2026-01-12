@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Texper Bilişim - Kayıt İstek Formu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #060918 url('world-dotted-map.png') no-repeat center center;
+      background-size: cover;
+      color: #ffffff;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      backdrop-filter: brightness(0.3);
+    }
+    .card {
+      background: rgba(10, 15, 36, 0.95);
+      backdrop-filter: blur(15px);
+      padding: 2.5rem;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+    }
+    .sitename { font-size: 1.6rem; font-weight: 700; color: #fff; margin-bottom: 20px; }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #333;
+      border-radius: 10px;
+      color: white;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .btn-reg {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #0d42ff;
+      color: white;
+      border-radius: 10px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-reg:hover { background: #1a51ff; transform: translateY(-2px); }
+    .back { margin-top: 15px; display: block; color: #ffc107; text-decoration: none; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="sitename">Kayıt Başvurusu</div>
+    <p style="font-size: 0.8rem; color: #aaa; margin-bottom: 20px;">Sistem erişimi için lütfen bilgilerinizi giriniz.</p>
+    
+    <form action="https://formspree.io/f/xqapdovq" method="POST">
+      <input type="text" name="Ad_Soyad" placeholder="Ad Soyad" required>
+      <input type="email" name="Email" placeholder="E-posta Adresi" required>
+      <input type="text" name="Sirket_Departman" placeholder="Şirket / Departman">
+      
+      <input type="hidden" name="_subject" value="Texper Portal - Yeni Kayıt Başvurusu">
+      
+      <button type="submit" class="btn-reg">BAŞVURUYU GÖNDER</button>
+    </form>
+    
+    <a href="index.html" class="back">← Giriş Ekranına Dön</a>
+  </div>
+</body>
+</html>
