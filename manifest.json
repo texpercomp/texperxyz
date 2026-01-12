@@ -1,0 +1,22 @@
+{
+  "name": "Texper Bilişim Portal",
+  "short_name": "Texper",
+  "description": "Texper Bilişim Sistem Yönetim Portalı",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#060918",
+  "theme_color": "#0d42ff",
+  "icons": [
+    {
+      "src": "assets/img/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/img/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

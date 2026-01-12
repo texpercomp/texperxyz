@@ -4,6 +4,11 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Texper Bilişim - Portal</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d42ff">
+  <link rel="apple-touch-icon" href="assets/img/favicon.png">
+  
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -38,19 +43,21 @@
     }
     .btn-main {
       display: block; width: 100%; padding: 14px; background: #0d42ff;
-      color: white; text-decoration: none; border-radius: 12px;
-      font-weight: 600; border: none; cursor: pointer; margin-bottom: 20px;
+      color: white; border-radius: 12px; font-weight: 600; border: none; cursor: pointer;
     }
     .portal-btn {
       display: block; width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05);
       color: white; text-decoration: none; border-radius: 10px; margin-bottom: 12px;
       border: 1px solid #333; transition: 0.3s;
     }
-    .portal-btn:hover { border-color: #0d42ff; background: rgba(13, 66, 255, 0.1); }
-    .footer { margin-top: 2rem; font-size: 0.75rem; color: #555; border-top: 1px solid #222; padding-top: 1rem; }
-    .footer a { color: #ffc107; text-decoration: none; }
     #portal { display: none; }
   </style>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
 </head>
 <body>
 
@@ -59,40 +66,28 @@
     <div class="subtitle">Cloud Gateway</div>
     <form onsubmit="verify(event)">
       <input type="password" id="pw" placeholder="Erişim Anahtarı" required>
-      <button type="submit" class="btn-main">OTURUM AÇ</button>
+      <button type="submit" class="btn-main">GİRİŞ YAP</button>
     </form>
-    <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
-      <a href="register.html" style="color:rgba(255,255,255,0.5); text-decoration:none;">Hesap Oluştur</a>
-      <a href="#" style="color:rgba(255,255,255,0.5); text-decoration:none;">Şifremi Unuttum</a>
-    </div>
-    <div class="footer">Altyapı: <a href="https://texper.com.tr" target="_blank">texper.com.tr</a></div>
+    <a href="register.html" style="display:block; margin-top:15px; color:rgba(255,255,255,0.5); text-decoration:none; font-size:0.8rem;">Hesap Oluştur</a>
   </div>
 
   <div id="portal" class="card">
     <div class="sitename">Yönetim Merkezi</div>
-    <div class="subtitle">Sistemler Aktif</div>
+    <div class="subtitle">Hoş Geldiniz</div>
     <a href="https://mesh.texper.keenetic.pro" class="portal-btn">Mesh Central</a>
-    <a href="http://depo.texper.keenetic.pro" class="portal-btn">Dosya Deposu (QNAP)</a>
-    <a href="https://texper.com.tr" class="portal-btn" style="border-color: #ffc107; color: #ffc107;">Ana Siteye Dön</a>
-    <div class="footer">Sistem Sağlayıcı: <b>texper.com.tr</b></div>
+    <a href="http://depo.texper.keenetic.pro" class="portal-btn">Dosya Deposu</a>
+    <a href="https://texper.com.tr" class="portal-btn" style="color: #ffc107;">Ana Site</a>
   </div>
 
   <script>
     function verify(e) {
       e.preventDefault();
       var input = document.getElementById('pw').value;
-      
-      // Şifre: 908 
-      // Gizleme Algoritması: (908 * 3) + 7 = 2731
-      // Biri koda bakınca 908'i göremez, sadece 2731 rakamını görür.
-      var check = (parseInt(input) * 3) + 7;
-
-      if (check === 2731) {
+      if (((parseInt(input) * 3) + 7) === 2731) { // Şifre: 908
         document.getElementById('login').style.display = 'none';
         document.getElementById('portal').style.display = 'block';
       } else {
-        alert("Yetkisiz Erişim! IP adresiniz kaydedildi.");
-        document.getElementById('pw').value = "";
+        alert("Yetkisiz Erişim!");
       }
     }
   </script>
