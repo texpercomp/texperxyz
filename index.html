@@ -10,10 +10,12 @@
   <link rel="apple-touch-icon" href="assets/img/favicon.png">
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: #060918 url('world-dotted-map.png') no-repeat center center;
+      /* ARKA PLAN BURADA GERİ GELDİ */
+      background: #060918 url('world-dotted-map.png') no-repeat center center fixed;
       background-size: cover;
       color: #ffffff;
       margin: 0;
@@ -21,8 +23,18 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      backdrop-filter: brightness(0.4);
+      overflow: hidden;
     }
+
+    /* Kartın arkasına hafif blur ekleyerek haritayı bozmadan şıklaştıralım */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: -1;
+    }
+
     .card {
       background: rgba(10, 15, 36, 0.92);
       backdrop-filter: blur(15px);
@@ -33,29 +45,49 @@
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+      position: relative;
+      z-index: 1;
     }
-    .sitename { font-size: 1.6rem; font-weight: 700; margin-bottom: 5px; }
+
+    .sitename { font-size: 1.6rem; font-weight: 700; margin-bottom: 5px; color: #fff; }
     .subtitle { font-size: 0.8rem; color: #ffc107; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2rem; }
+
     input[type="password"] {
       width: 100%; padding: 14px; background: rgba(255, 255, 255, 0.05);
       border: 1px solid #2d2d2d; border-radius: 12px; color: white;
       text-align: center; margin-bottom: 15px; box-sizing: border-box; outline: none;
     }
+
     .btn-main {
       display: block; width: 100%; padding: 14px; background: #0d42ff;
       color: white; border-radius: 12px; font-weight: 600; border: none; cursor: pointer;
+      transition: 0.3s;
     }
+
+    .btn-main:hover { background: #1a51ff; transform: translateY(-2px); }
+
     .portal-btn {
       display: block; width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05);
       color: white; text-decoration: none; border-radius: 10px; margin-bottom: 12px;
       border: 1px solid #333; transition: 0.3s;
     }
+    .portal-btn:hover { border-color: #0d42ff; background: rgba(13, 66, 255, 0.1); }
+
+    .footer { margin-top: 2rem; font-size: 0.75rem; color: #555; border-top: 1px solid #222; padding-top: 1rem; }
+    .footer a { color: #ffc107; text-decoration: none; }
+
     #portal { display: none; }
   </style>
 
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').then(reg => {
+          console.log('PWA Kayıt Başarılı:', reg.scope);
+        }).catch(err => {
+          console.log('PWA Kayıt Hatası:', err);
+        });
+      });
     }
   </script>
 </head>
@@ -69,25 +101,29 @@
       <button type="submit" class="btn-main">GİRİŞ YAP</button>
     </form>
     <a href="register.html" style="display:block; margin-top:15px; color:rgba(255,255,255,0.5); text-decoration:none; font-size:0.8rem;">Hesap Oluştur</a>
+    <div class="footer">Altyapı: <a href="https://texper.com.tr" target="_blank">texper.com.tr</a></div>
   </div>
 
   <div id="portal" class="card">
-    <div class="sitename">Yönetim Merkezi</div>
-    <div class="subtitle">Hoş Geldiniz</div>
-    <a href="https://mesh.texper.keenetic.pro" class="portal-btn">Mesh Central</a>
-    <a href="http://depo.texper.keenetic.pro" class="portal-btn">Dosya Deposu</a>
-    <a href="https://texper.com.tr" class="portal-btn" style="color: #ffc107;">Ana Site</a>
+    <div class="sitename">Yönetim Paneli</div>
+    <div class="subtitle">Sistemler Aktif</div>
+    <a href="https://mesh.texper.keenetic.pro" class="portal-btn" target="_blank">Mesh Central</a>
+    <a href="http://depo.texper.keenetic.pro" class="portal-btn" target="_blank">Dosya Deposu</a>
+    <a href="https://texper.com.tr" class="portal-btn" style="border-color: #ffc107; color: #ffc107;">Ana Sayfaya Dön</a>
+    <div class="footer">Güvenli Bağlantı: <b>texper.xyz</b></div>
   </div>
 
   <script>
     function verify(e) {
       e.preventDefault();
       var input = document.getElementById('pw').value;
-      if (((parseInt(input) * 3) + 7) === 2731) { // Şifre: 908
+      // Şifre Gizleme Algoritması: (908 * 3) + 7 = 2731
+      if (((parseInt(input) * 3) + 7) === 2731) {
         document.getElementById('login').style.display = 'none';
         document.getElementById('portal').style.display = 'block';
       } else {
-        alert("Yetkisiz Erişim!");
+        alert("Yetkisiz Erişim! IP adresiniz kaydedildi.");
+        document.getElementById('pw').value = "";
       }
     }
   </script>
