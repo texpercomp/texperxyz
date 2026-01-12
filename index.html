@@ -3,79 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Texper Cloud</title>
+    <title>Texper Portal</title>
     <style>
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: #0f172a; /* Çok koyu lacivert/siyah */
-            color: #f8fafc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .card {
-            background-color: #1e293b;
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-            width: 100%;
-            max-width: 350px;
-            text-align: center;
-            border: 1px solid #334155;
-        }
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            font-weight: 600;
-            color: #94a3b8;
-        }
-        .btn {
-            display: block;
-            padding: 14px;
-            margin-bottom: 12px;
-            text-decoration: none;
-            color: white;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: transform 0.2s, background-color 0.2s;
-        }
-        .btn:active {
-            transform: scale(0.98);
-        }
-        .btn-mesh {
-            background-color: #2563eb; /* Mesh Mavisi */
-        }
-        .btn-mesh:hover {
-            background-color: #1d4ed8;
-        }
-        .btn-depo {
-            background-color: #059669; /* Depo Yeşili */
-        }
-        .btn-depo:hover {
-            background-color: #047857;
-        }
-        .footer {
-            margin-top: 1.5rem;
-            font-size: 0.75rem;
-            color: #64748b;
-        }
+        body { font-family: sans-serif; background-color: #0d0d0d; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #1a1a1a; padding: 2rem; border-radius: 15px; width: 300px; text-align: center; border: 1px solid #333; }
+        input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #444; background: #222; color: white; box-sizing: border-box; text-align: center; }
+        .btn { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #242424; color: white; cursor: pointer; font-weight: bold; border: 1px solid #444; text-decoration: none; display: block; margin-bottom: 10px; box-sizing: border-box; }
+        .btn:hover { background: #333; border-color: #007aff; }
+        #portal { display: none; }
+        .infra { margin-top: 1rem; font-size: 0.8rem; color: #555; }
+        .infra a { color: #007aff; text-decoration: none; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>Texper Cloud</h1>
-        
-        <a href="https://mesh.texper.keenetic.pro" class="btn btn-mesh">MESH CENTRAL</a>
-        
-        <a href="http://depo.texper.keenetic.pro" class="btn btn-depo">DEPO</a>
+    <div id="login-area" class="card">
+        <h3>GİRİŞ PANELİ</h3>
+        <input type="password" id="sifre" placeholder="Kod" autocomplete="off">
+        <button type="button" class="btn" onclick="kontrol Et()">SİSTEME GİR</button>
+        <p id="hata" style="color:red; display:none;">Hatalı!</p>
+    </div>
 
-        <div class="footer">
-            © 2026 texper.xyz
+    <div id="portal" class="card">
+        <h3>TEXPER PORTAL</h3>
+        <a href="https://mesh.texper.keenetic.pro" class="btn">MESH CENTRAL</a>
+        <a href="http://depo.texper.keenetic.pro" class="btn">DOSYA DEPOSU</a>
+        <div class="infra">
+            Altyapı: <a href="http://texper.net" target="_blank">texper.net</a>
         </div>
     </div>
+
+    <script>
+        function kontrolEt() {
+            var input = document.getElementById('sifre').value;
+            if (input === "908") {
+                document.getElementById('login-area').style.display = 'none';
+                document.getElementById('portal').style.display = 'block';
+            } else {
+                alert("Hatalı Kod!");
+                document.getElementById('sifre').value = "";
+            }
+        }
+        
+        // Enter tuşu için destek
+        document.getElementById('sifre').onkeypress = function(e) {
+            if (e.keyCode == 13) { kontrolEt(); }
+        }
+    </script>
 
 </body>
 </html>
