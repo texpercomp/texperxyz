@@ -5,127 +5,172 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Texper Bilişim - Portal</title>
   
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0d42ff">
-  <link rel="apple-touch-icon" href="assets/img/favicon.png">
-  
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   
   <style>
-    body {
+    body, html {
+      margin: 0; padding: 0; width: 100%; height: 100%;
       font-family: 'Poppins', sans-serif;
-      /* ARKA PLAN BURADA GERİ GELDİ */
-      background: #060918 url('world-dotted-map.png') no-repeat center center fixed;
-      background-size: cover;
-      color: #ffffff;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background-color: #05070a; /* Modern Koyu Arka Plan */
+      display: flex; justify-content: center; align-items: center;
       overflow: hidden;
     }
 
-    /* Kartın arkasına hafif blur ekleyerek haritayı bozmadan şıklaştıralım */
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.4);
+    /* HAREKETLİ DEVRE KATMANI */
+    #circuitCanvas {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
       z-index: -1;
     }
 
     .card {
-      background: rgba(10, 15, 36, 0.92);
+      background: rgba(10, 14, 26, 0.85);
       backdrop-filter: blur(15px);
-      padding: 2.5rem;
+      -webkit-backdrop-filter: blur(15px);
+      padding: 45px;
       border-radius: 24px;
-      width: 100%;
+      border: 1px solid rgba(255, 193, 7, 0.2);
+      width: 90%;
       max-width: 380px;
       text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
-      position: relative;
-      z-index: 1;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
     }
 
-    .sitename { font-size: 1.6rem; font-weight: 700; margin-bottom: 5px; color: #fff; }
-    .subtitle { font-size: 0.8rem; color: #ffc107; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2rem; }
+    /* LOGO STİLİ HARFLER (T Üst Sarı, L Alt Sarı) */
+    .portal-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 5px;
+      letter-spacing: 2px;
+    }
 
-    input[type="password"] {
-      width: 100%; padding: 14px; background: rgba(255, 255, 255, 0.05);
-      border: 1px solid #2d2d2d; border-radius: 12px; color: white;
-      text-align: center; margin-bottom: 15px; box-sizing: border-box; outline: none;
+    .char-t {
+      position: relative; color: #fff; display: inline-block;
+    }
+    .char-t::before {
+      content: "T"; position: absolute; left: 0; top: 0; width: 100%; height: 35%;
+      color: #ffc107; overflow: hidden;
+    }
+
+    .char-l {
+      position: relative; color: #fff; display: inline-block;
+    }
+    .char-l::before {
+      content: "L"; position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+      color: #ffc107; clip-path: inset(75% 0 0 0);
+    }
+
+    .subtitle { 
+      font-size: 0.75rem; color: #ffc107; margin-bottom: 30px; 
+      text-transform: uppercase; letter-spacing: 4px;
+    }
+
+    input {
+      width: 100%; padding: 14px; margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px; color: #fff; text-align: center;
+      outline: none; box-sizing: border-box;
     }
 
     .btn-main {
-      display: block; width: 100%; padding: 14px; background: #0d42ff;
-      color: white; border-radius: 12px; font-weight: 600; border: none; cursor: pointer;
-      transition: 0.3s;
+      width: 100%; padding: 14px; background: #ffc107; border: none;
+      border-radius: 12px; color: #000; font-weight: 700; cursor: pointer; transition: 0.3s;
     }
 
-    .btn-main:hover { background: #1a51ff; transform: translateY(-2px); }
+    .btn-main:hover { background: #fff; transform: translateY(-2px); }
 
     .portal-btn {
-      display: block; width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05);
-      color: white; text-decoration: none; border-radius: 10px; margin-bottom: 12px;
-      border: 1px solid #333; transition: 0.3s;
+      display: block; width: 100%; padding: 12px; margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff; text-decoration: none; border-radius: 10px; font-weight: 600;
     }
-    .portal-btn:hover { border-color: #0d42ff; background: rgba(13, 66, 255, 0.1); }
-
-    .footer { margin-top: 2rem; font-size: 0.75rem; color: #555; border-top: 1px solid #222; padding-top: 1rem; }
-    .footer a { color: #ffc107; text-decoration: none; }
-
-    #portal { display: none; }
   </style>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').then(reg => {
-          console.log('PWA Kayıt Başarılı:', reg.scope);
-        }).catch(err => {
-          console.log('PWA Kayıt Hatası:', err);
-        });
-      });
-    }
-  </script>
 </head>
 <body>
 
-  <div id="login" class="card">
-    <div class="sitename">Texper Bilişim</div>
-    <div class="subtitle">Cloud Gateway</div>
+  <canvas id="circuitCanvas"></canvas>
+
+  <div id="login-card" class="card">
+    <img src="assets/img/1.png" alt="Logo" style="max-height: 40px; margin-bottom: 20px;">
+    <div class="portal-title">POR<span class="char-t">T</span>A<span class="char-l">L</span></div>
+    <div class="subtitle">Secure Entry</div>
     <form onsubmit="verify(event)">
       <input type="password" id="pw" placeholder="Erişim Anahtarı" required>
       <button type="submit" class="btn-main">GİRİŞ YAP</button>
     </form>
-    <a href="register.html" style="display:block; margin-top:15px; color:rgba(255,255,255,0.5); text-decoration:none; font-size:0.8rem;">Hesap Oluştur</a>
-    <div class="footer">Altyapı: <a href="https://texper.com.tr" target="_blank">texper.com.tr</a></div>
   </div>
 
-  <div id="portal" class="card">
-    <div class="sitename">Yönetim Paneli</div>
-    <div class="subtitle">Sistemler Aktif</div>
+  <div id="portal-panel" class="card" style="display: none;">
+    <div class="portal-title">PANE<span class="char-l">L</span></div>
+    <div class="subtitle">Systems Online</div>
     <a href="https://mesh.texper.keenetic.pro" class="portal-btn" target="_blank">Mesh Central</a>
     <a href="http://depo.texper.keenetic.pro" class="portal-btn" target="_blank">Dosya Deposu</a>
-    <a href="https://texper.com.tr" class="portal-btn" style="border-color: #ffc107; color: #ffc107;">Ana Sayfaya Dön</a>
-    <div class="footer">Güvenli Bağlantı: <b>texper.xyz</b></div>
+    <a href="index.html" class="portal-btn" style="border-color: #ffc107; color: #ffc107;">Çıkış</a>
   </div>
 
   <script>
     function verify(e) {
       e.preventDefault();
-      var input = document.getElementById('pw').value;
-      // Şifre Gizleme Algoritması: (908 * 3) + 7 = 2731
-      if (((parseInt(input) * 3) + 7) === 2731) {
-        document.getElementById('login').style.display = 'none';
-        document.getElementById('portal').style.display = 'block';
-      } else {
-        alert("Yetkisiz Erişim! IP adresiniz kaydedildi.");
-        document.getElementById('pw').value = "";
+      if (document.getElementById('pw').value === '908') { 
+        document.getElementById('login-card').style.display = 'none';
+        document.getElementById('portal-panel').style.display = 'block';
+      } else { alert('Hatalı Şifre!'); }
+    }
+
+    // ELEKTRO-DEVRE ANİMASYONU SCRIPTİ
+    const canvas = document.getElementById('circuitCanvas');
+    const ctx = canvas.getContext('2d');
+    let lines = [];
+
+    function init() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      lines = [];
+      for (let i = 0; i < 45; i++) {
+        lines.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          len: Math.random() * 80 + 40,
+          speed: Math.random() * 2 + 0.5,
+          v: Math.random() > 0.5
+        });
       }
     }
+
+    function animate() {
+      ctx.fillStyle = "rgba(5, 7, 10, 0.15)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      lines.forEach(l => {
+        ctx.strokeStyle = "rgba(255, 193, 7, 0.4)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(l.x, l.y);
+        
+        if(l.v) {
+          ctx.lineTo(l.x, l.y + l.len);
+          l.y += l.speed;
+          if (l.y > canvas.height) l.y = -l.len;
+        } else {
+          ctx.lineTo(l.x + l.len, l.y);
+          l.x += l.speed;
+          if (l.x > canvas.width) l.x = -l.len;
+        }
+        ctx.stroke();
+
+        ctx.fillStyle = "#ffc107";
+        ctx.beginPath();
+        ctx.arc(l.v ? l.x : l.x + l.len, l.v ? l.y + l.len : l.y, 1.5, 0, Math.PI*2);
+        ctx.fill();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    animate();
   </script>
 </body>
 </html>
